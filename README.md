@@ -1,70 +1,75 @@
-# Getting Started with Create React App
+# Netflix Clone+ (Recruiter Showcase)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A redesigned React-based Netflix clone focused on product thinking, visual polish, and interactive depth.
 
-## Available Scripts
+## What Was Upgraded
 
-In the project directory, you can run:
+- Full UI redesign with cinematic hero, motion, responsive layout, and modern typography.
+- Centralized catalog architecture (TMDB categories loaded once and normalized).
+- Smart discovery features:
+  - Live search across title + overview.
+  - Genre filtering chips.
+  - My List only mode.
+- User curation features:
+  - Favorite / My List actions.
+  - Add custom titles.
+  - Edit title details.
+  - Hide and restore titles.
+- Rich interaction surfaces:
+  - Detail modal with metadata and actions.
+  - Horizontal rails with smooth scroll controls.
+  - Dashboard metrics (catalog count, rating, favorites, list size).
+- Persistent local state via `localStorage` so curation survives page refreshes.
 
-### `npm start`
+## Tech Stack
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your bCategoryser.
+- React 18
+- Create React App
+- Axios (TMDB API)
+- Font Awesome
+- CSS (custom design system with variables and responsive breakpoints)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Run Locally
 
-### `npm test`
+1. Install dependencies:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+npm install
+```
 
-### `npm run build`
+2. Start development server:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+npm start
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+3. Create production build:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+npm run build
+```
 
-### `npm run eject`
+4. Run tests:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```bash
+npm test -- --watchAll=false
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Environment Variables (Optional)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+You can set your own TMDB key with:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```bash
+REACT_APP_TMDB_API_KEY=your_api_key_here
+```
 
-## Learn More
+If omitted, the app falls back to the key currently stored in source.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Recruiter Notes
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+This project now demonstrates:
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- Frontend architecture and state modeling.
+- UX and visual design improvement capability.
+- Feature implementation beyond clone-level parity.
+- Production readiness checks (build + tests).

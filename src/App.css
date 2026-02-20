@@ -1,6 +1,298 @@
-* {
-  margin: 0;
+:root {
+  --app-bg: #080d23;
+  --app-bg-soft: #101a42;
+  --text-primary: #f6f8ff;
+  --text-muted: #b8c0d8;
+  --accent-red: #e50914;
+  --accent-cyan: #17b7ff;
+  --accent-gold: #f7bf4f;
+  --accent-violet: #9d84ff;
+  --accent-rose: #ff5578;
+  --accent-amber: #ff9e44;
+  --accent-lime: #9fd95f;
+  --accent-emerald: #20c894;
+  --accent-indigo: #7291ff;
 }
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 .App {
-  background-color: #111;
+  min-height: 100vh;
+  background: radial-gradient(circle at 15% 0%, rgba(239, 79, 82, 0.18), transparent 36%),
+    radial-gradient(circle at 85% 14%, rgba(29, 176, 255, 0.16), transparent 33%),
+    linear-gradient(180deg, #060a1d 0%, var(--app-bg) 62%, #050919 100%);
+  color: var(--text-primary);
+  overflow-x: clip;
+}
+
+.app-main {
+  position: relative;
+  z-index: 1;
+  width: min(1420px, 96vw);
+  margin: -2.6rem auto 0;
+  padding-bottom: 3rem;
+}
+
+.app-alert {
+  margin: 0 0 0.8rem;
+  border: 1px solid rgba(255, 153, 153, 0.35);
+  background: rgba(80, 19, 28, 0.56);
+  color: #ffc4ce;
+  border-radius: 0.75rem;
+  padding: 0.7rem 0.8rem;
+  font: 600 0.81rem/1.4 "Manrope", sans-serif;
+}
+
+.app-dashboard {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-bottom: 0.95rem;
+}
+
+.metric-card {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 0.95rem;
+  padding: 0.8rem;
+  background: linear-gradient(155deg, rgba(16, 25, 64, 0.83), rgba(8, 12, 32, 0.85));
+  box-shadow: 0 15px 30px rgba(2, 5, 16, 0.28);
+}
+
+.metric-card__label {
+  margin: 0;
+  color: var(--text-muted);
+  font: 600 0.72rem/1.1 "Manrope", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.metric-card__value {
+  margin: 0.35rem 0 0;
+  color: var(--text-primary);
+  font: 400 clamp(1.8rem, 2.5vw, 2.4rem) / 1 "Bebas Neue", sans-serif;
+  letter-spacing: 0.04em;
+}
+
+.metric-card__hint {
+  margin: 0.3rem 0 0;
+  color: rgba(235, 240, 250, 0.73);
+  font: 500 0.74rem/1.2 "Manrope", sans-serif;
+}
+
+.app-controls {
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 1rem;
+  background: linear-gradient(155deg, rgba(15, 24, 61, 0.88), rgba(10, 15, 39, 0.88));
+  padding: 0.9rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.app-controls__left h2 {
+  margin: 0;
+  color: var(--text-primary);
+  font: 400 2rem/0.95 "Bebas Neue", sans-serif;
+  letter-spacing: 0.04em;
+}
+
+.app-controls__left p {
+  margin: 0.35rem 0 0;
+  color: var(--text-muted);
+  font: 500 0.82rem/1.45 "Manrope", sans-serif;
+  max-width: 60ch;
+}
+
+.app-controls__right {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.app-btn {
+  border: 1px solid transparent;
+  border-radius: 0.72rem;
+  padding: 0.56rem 0.8rem;
+  cursor: pointer;
+  font: 700 0.74rem/1 "Manrope", sans-serif;
+  letter-spacing: 0.01em;
+  transition: transform 120ms ease, border-color 120ms ease, filter 120ms ease;
+}
+
+.app-btn:hover {
+  transform: translateY(-1px);
+}
+
+.app-btn--solid {
+  color: #ffffff;
+  border: 0;
+  background: linear-gradient(132deg, var(--accent-red), var(--accent-rose));
+}
+
+.app-btn--ghost {
+  color: var(--text-muted);
+  border-color: rgba(255, 255, 255, 0.2);
+  background: transparent;
+}
+
+.app-btn--ghost:hover {
+  border-color: rgba(255, 255, 255, 0.36);
+  color: var(--text-primary);
+}
+
+.genre-strip {
+  margin-top: 0.9rem;
+  display: flex;
+  gap: 0.45rem;
+  overflow-x: auto;
+  padding-bottom: 0.15rem;
+}
+
+.genre-strip::-webkit-scrollbar {
+  display: none;
+}
+
+.genre-chip {
+  flex: 0 0 auto;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 999px;
+  padding: 0.42rem 0.68rem;
+  font: 600 0.72rem/1 "Manrope", sans-serif;
+  cursor: pointer;
+  transition: border-color 120ms ease, color 120ms ease, background 120ms ease;
+}
+
+.genre-chip:hover {
+  border-color: rgba(255, 255, 255, 0.35);
+  color: var(--text-primary);
+}
+
+.genre-chip--active {
+  border-color: rgba(23, 183, 255, 0.55);
+  color: #ffffff;
+  background: rgba(23, 183, 255, 0.2);
+}
+
+.loading-grid {
+  margin-top: 1.5rem;
+  display: grid;
+  gap: 1.2rem;
+}
+
+.loading-row__title {
+  width: 220px;
+  height: 18px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.08));
+  background-size: 220% 100%;
+  animation: shimmer 1.35s linear infinite;
+}
+
+.loading-row__cards {
+  margin-top: 0.7rem;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+.loading-card {
+  min-height: 200px;
+  border-radius: 0.8rem;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.08));
+  background-size: 220% 100%;
+  animation: shimmer 1.35s linear infinite;
+}
+
+.empty-state {
+  margin-top: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 1rem;
+  padding: 1.1rem;
+  text-align: center;
+  background: linear-gradient(150deg, rgba(16, 24, 62, 0.88), rgba(10, 15, 39, 0.88));
+}
+
+.empty-state h3 {
+  margin: 0;
+  color: var(--text-primary);
+  font: 700 1.1rem/1.2 "Manrope", sans-serif;
+}
+
+.empty-state p {
+  margin: 0.5rem auto 0.9rem;
+  color: var(--text-muted);
+  font: 500 0.86rem/1.5 "Manrope", sans-serif;
+  max-width: 45ch;
+}
+
+.toast {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 70;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.72rem;
+  background: rgba(7, 12, 31, 0.93);
+  color: #ffffff;
+  padding: 0.6rem 0.8rem;
+  box-shadow: 0 18px 35px rgba(0, 0, 0, 0.36);
+  font: 700 0.75rem/1.2 "Manrope", sans-serif;
+  animation: toast-in 160ms ease;
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 0% 0%;
+  }
+  to {
+    background-position: -220% 0%;
+  }
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 1024px) {
+  .app-dashboard {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .loading-row__cards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .app-controls {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 680px) {
+  .app-main {
+    margin-top: -1.6rem;
+  }
+
+  .app-dashboard {
+    grid-template-columns: 1fr;
+  }
+
+  .loading-row__cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }

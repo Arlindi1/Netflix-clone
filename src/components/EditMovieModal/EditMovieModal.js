@@ -1,42 +1,73 @@
-// EditMovieModal.js
-import React from 'react';
-import './EditMovieModal.css'; // This is assuming you have a common CSS file for modals
+import "./EditMovieModal.css";
 
-const EditMovieModal = ({ show, movie, onSave, onClose }) => {
-  const [editedMovie, setEditedMovie] = React.useState(movie);
-
-  React.useEffect(() => {
-    setEditedMovie(movie); // This ensures that the modal receives the latest movie data
-  }, [movie]);
-
-  if (!show) {
+const EditMovieModal = ({
+  isOpen,
+  movie,
+  onClose,
+  onToggleFavorite,
+  onToggleMyList,
+  onEditMovie,
+  onDeleteMovie,
+}) => {
+  if (!isOpen || !movie) {
     return null;
   }
 
-  const handleChange = (e) => {
-    setEditedMovie({ ...editedMovie, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSave(editedMovie);
-  };
-
   return (
-    <div className="modal">
-      <div className="modal-content">
-        <span className="close" onClick={onClose}>&times;</span>
-        <form onSubmit={handleSubmit}>
-          <label>
-            Title:
-            <input type="text" name="title" value={editedMovie.title} onChange={handleChange} />
-          </label>
-          {/* Add other fields as needed, make sure they match the ones in AddMovie modal */}
-          <div className="modal-actions">
-            <button type="button" onClick={onClose}>Cancel</button>
-            <button type="submit">Save Changes</button>
+    <div className="detail-modal__backdrop" onClick={onClose}>
+      <div
+        className="detail-modal"
+        onClick={(event) => event.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-label={`${movie.title} details`}
+      >
+        <figure
+          className="detail-modal__media"
+          style={
+            movie.backdropPath || movie.posterPath
+              ? {
+                  backgroundImage: `linear-gradient(to top, rgba(7, 11, 29, 0.9), rgba(7, 11, 29, 0.4)), url("${
+                    movie.backdropPath || movie.posterPath
+                  }")`,
+                }
+              : undefined
+          }
+        >
+          <button type="button" className="detail-modal__close" onClick={onClose}>
+            x
+          </button>
+          <div className="detail-modal__title-group">
+            <p>Title Details</p>
+            <h3>{movie.title}</h3>
           </div>
-        </form>
+        </figure>
+
+        <div className="detail-modal__content">
+          <p className="detail-modal__overview">{movie.overview}</p>
+
+          <div className="detail-modal__metadata">
+            <span>{movie.year}</span>
+            <span>{Number(movie.rating || 0).toFixed(1)} Rating</span>
+            <span>{movie.language}</span>
+            <span>{movie.genres.join(" • ") || "Uncategorized"}</span>
+          </div>
+
+          <div className="detail-modal__actions">
+            <button type="button" onClick={() => onToggleMyList(movie)}>
+              {movie.inMyList ? "Remove from My List" : "Add to My List"}
+            </button>
+            <button type="button" onClick={() => onToggleFavorite(movie)}>
+              {movie.isFavorite ? "Unfavorite" : "Favorite"}
+            </button>
+            <button type="button" onClick={() => onEditMovie(movie)}>
+              Edit
+            </button>
+            <button type="button" onClick={() => onDeleteMovie(movie)}>
+              Delete
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -1,142 +1,172 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
+import { useRef } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faChevronLeft,
+  faChevronRight,
+  faCircleInfo,
+  faHeart,
+  faListCheck,
+  faPenToSquare,
+  faPlus,
+  faTrashCan,
+} from "@fortawesome/free-solid-svg-icons";
 import "./Category.css";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrashAlt, faStar } from '@fortawesome/free-solid-svg-icons';
-import AddNewMovie from "../AddNewMovie";
-import EditMovieModal from "../EditMovieModal/EditMovieModal";
 
-const baseUrl = "https://image.tmdb.org/t/p/original/";
+const Category = ({
+  title,
+  subtitle,
+  accent,
+  movies,
+  onToggleFavorite,
+  onToggleMyList,
+  onOpenDetails,
+  onEditMovie,
+  onDeleteMovie,
+  onAddMovie,
+  showAddButton = true,
+}) => {
+  const railRef = useRef(null);
 
-const Category = ({ title, fetchUrl, isLargeCategory }) => {
-  const [movies, setMovies] = useState([]);
-  const [showModal, setShowModal] = useState(false); // State to manage modal visibility
-  const [editModalVisible, setEditModalVisible] = useState(false); // State for edit modal visibility
-  const [currentEditingMovie, setCurrentEditingMovie] = useState(null);
-
-  useEffect(() => {
-    async function fetchData() {
-      const request = await axios.get(fetchUrl);
-      setMovies(request.data.results.map(movie => ({
-        ...movie,
-        isFavorite: false
-      })));
-      return request;
+  const scrollRail = (direction) => {
+    if (!railRef.current) {
+      return;
     }
-    fetchData();
-  }, [fetchUrl]);
 
-  const handleFavorite = (movieId) => {
-    const updatedMovies = movies.map(movie => {
-      if (movie.id === movieId) {
-        return { ...movie, isFavorite: !movie.isFavorite };
-      }
-      return movie;
-    }).sort((a, b) => b.isFavorite - a.isFavorite);
-    setMovies(updatedMovies);
+    railRef.current.scrollBy({
+      left: direction * railRef.current.clientWidth * 0.9,
+      behavior: "smooth",
+    });
   };
-  
-
-  const handleDelete = (movieId) => {
-    const updatedMovies = movies.filter(movie => movie.id !== movieId);
-    setMovies(updatedMovies); // Update the state
-  };
-
-  const handleEdit = (movieId) => {
-    const movieToEdit = movies.find(movie => movie.id === movieId);
-    if (movieToEdit) {
-      setCurrentEditingMovie(movieToEdit);
-      setEditModalVisible(true);
-    }
-  };
-
-  const handleSaveEdit = (updatedMovie) => {
-    const updatedMovies = movies.map(movie => 
-      movie.id === updatedMovie.id ? updatedMovie : movie
-    );
-    setMovies(updatedMovies);
-    setEditModalVisible(false);
-  };
-
-
-   const addMovie = (movieDetails) => {
-    const newMovie = {
-      ...movieDetails,
-      id: Date.now(), // or another unique identifier
-      poster_path: movieDetails.imageUrl.startsWith("http") ? movieDetails.imageUrl : `${baseUrl}${movieDetails.imageUrl}`, // Correct the image URL
-      isFavorite: false, // Set default favorite status
-    };
-
-    console.log('Adding new movie:', newMovie); // Check this log
-
-    setMovies(prevMovies => [newMovie, ...prevMovies]);
-    setShowModal(false);
-  };
-  
-  const getImageUrl = (movie) => {
-    if (movie.poster_path?.startsWith("http")) {
-      return movie.poster_path;
-    }
-  
-    return `${baseUrl}${isLargeCategory ? movie.poster_path : movie.backdrop_path}`;
-  };
-
 
   return (
-    <>
-      <div className="Category">
-        <div className="Category__header">
-          <h2>{title}</h2>
-          <button className="Category__addMovieBtn" onClick={() => setShowModal(true)}>
-            Add Movie
-          </button>
+    <section className="category">
+      <header className="category__header">
+        <div>
+          <h2 style={{ "--category-accent": accent }}>{title}</h2>
+          <p>{subtitle}</p>
         </div>
-        <div className="Category__posters">
+        <div className="category__header-actions">
+          <span>{movies.length} titles</span>
+          {showAddButton ? (
+            <button type="button" className="category__add-button" onClick={onAddMovie}>
+              <FontAwesomeIcon icon={faPlus} />
+              Add Title
+            </button>
+          ) : null}
+        </div>
+      </header>
+
+      <div className="category__rail-wrap">
+        <button
+          type="button"
+          className="category__scroll-button"
+          onClick={() => scrollRail(-1)}
+          aria-label={`Scroll ${title} left`}
+        >
+          <FontAwesomeIcon icon={faChevronLeft} />
+        </button>
+
+        <div className="category__rail" ref={railRef}>
           {movies.map((movie) => (
-            <div key={movie.id} className="Category__posterContainer">
-              <img
-                className={`Category__poster ${isLargeCategory ? "Category__posterLarge" : ""}`}
-                src={getImageUrl(movie)}
-                alt={movie.title || movie.name}
-              />
-              <div className="Category__posterActions">
-                <FontAwesomeIcon
-                  icon={faStar}
-                  className={`fa-icon star-icon ${movie.isFavorite ? "favorite" : ""}`}
-                  onClick={() => handleFavorite(movie.id)}
-                />
-                <FontAwesomeIcon
-                  icon={faEdit}
-                  className="fa-icon"
-                  onClick={() => handleEdit(movie.id)}
-                />
-                <FontAwesomeIcon
-                  icon={faTrashAlt}
-                  className="fa-icon"
-                  onClick={() => handleDelete(movie.id)}
-                />
+            <article
+              key={`${movie.movieKey}-${title}`}
+              className="category-card"
+              onClick={() => onOpenDetails(movie)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  onOpenDetails(movie);
+                }
+              }}
+              role="button"
+              tabIndex={0}
+            >
+              {movie.posterPath || movie.backdropPath ? (
+                <img src={movie.posterPath || movie.backdropPath} alt={movie.title} />
+              ) : (
+                <div className="category-card__placeholder">{movie.title.slice(0, 1)}</div>
+              )}
+
+              <div className="category-card__overlay">
+                <div className="category-card__meta">
+                  <h3>{movie.title}</h3>
+                  <p>
+                    {movie.year} • {Number(movie.rating || 0).toFixed(1)} •{" "}
+                    {movie.genres[0] || "Drama"}
+                  </p>
+                </div>
+
+                <div className="category-card__actions">
+                  <button
+                    type="button"
+                    aria-label={`${
+                      movie.inMyList ? "Remove from my list" : "Add to my list"
+                    } ${movie.title}`}
+                    className={movie.inMyList ? "is-active" : ""}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      onToggleMyList(movie);
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faListCheck} />
+                  </button>
+                  <button
+                    type="button"
+                    aria-label={`${movie.isFavorite ? "Unfavorite" : "Favorite"} ${movie.title}`}
+                    className={movie.isFavorite ? "is-active" : ""}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      onToggleFavorite(movie);
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faHeart} />
+                  </button>
+                  <button
+                    type="button"
+                    aria-label={`Edit ${movie.title}`}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      onEditMovie(movie);
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faPenToSquare} />
+                  </button>
+                  <button
+                    type="button"
+                    aria-label={`Delete ${movie.title}`}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      onDeleteMovie(movie);
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faTrashCan} />
+                  </button>
+                  <button
+                    type="button"
+                    aria-label={`More info for ${movie.title}`}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      onOpenDetails(movie);
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faCircleInfo} />
+                  </button>
+                </div>
               </div>
-            </div>
+            </article>
           ))}
         </div>
+
+        <button
+          type="button"
+          className="category__scroll-button"
+          onClick={() => scrollRail(1)}
+          aria-label={`Scroll ${title} right`}
+        >
+          <FontAwesomeIcon icon={faChevronRight} />
+        </button>
       </div>
-      <AddNewMovie 
-        show={showModal} 
-        onClose={() => setShowModal(false)} 
-        onAdd={addMovie} 
-        baseUrl={baseUrl}
-      />
-      {editModalVisible && (
-        <EditMovieModal
-          show={editModalVisible}
-          movie={currentEditingMovie}
-          onSave={handleSaveEdit}
-          onClose={() => setEditModalVisible(false)}
-        />
-      )}
-    </>
+    </section>
   );
-  
 };
 
 export default Category;

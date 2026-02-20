@@ -1,35 +1,62 @@
 import { useEffect, useState } from "react";
 import "./Navbar.css";
 
-const Navbar = () => {
-  const [show, setShow] = useState(false);
+const NAV_LINKS = ["Home", "Series", "Movies", "New & Popular"];
+
+const Navbar = ({
+  searchQuery,
+  onSearchChange,
+  favoriteCount,
+  myListCount,
+  showMyListOnly,
+  onToggleMyList,
+  onClearFilters,
+}) => {
+  const [isScrolled, setIsScrolled] = useState(false);
+
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 100) {
-        setShow(true);
-      } else {
-        setShow(false);
-      }
+      setIsScrolled(window.scrollY > 40);
     };
-  
-    // Add event listener with handleScroll function
+
     window.addEventListener("scroll", handleScroll);
-  
-    // Cleanup function to remove the event listener with the same handleScroll function reference
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <div className={`nav ${show ? "nav__black " : ""}`}>
-      <img className="nav__logo" src="./netflix-logo.png" alt="netflix-logo" />
-      <img
-        className="nav__avatar"
-        src="./netflix-avatar.png"
-        alt="netflix-avatar"
-      />
-    </div>
+    <header className={`nav ${isScrolled ? "nav--solid" : ""}`}>
+      <div className="nav__left">
+        <img className="nav__logo" src="/netflix-logo.png" alt="Netflix logo" />
+        <nav className="nav__links" aria-label="Primary">
+          {NAV_LINKS.map((link) => (
+            <button key={link} type="button" className="nav__link">
+              {link}
+            </button>
+          ))}
+        </nav>
+      </div>
+
+      <div className="nav__right">
+        <label className="nav__search">
+          <span className="sr-only">Search movies and series</span>
+          <input
+            type="text"
+            placeholder="Search titles, genres, keywords..."
+            value={searchQuery}
+            onChange={(event) => onSearchChange(event.target.value)}
+          />
+        </label>
+
+        <button type="button" className="nav__pill" onClick={onToggleMyList}>
+          {showMyListOnly ? "Showing My List" : `My List (${myListCount})`}
+        </button>
+        <span className="nav__meta">Favorites: {favoriteCount}</span>
+        <button type="button" className="nav__clear" onClick={onClearFilters}>
+          Reset
+        </button>
+        <img className="nav__avatar" src="/Netflix-avatar.png" alt="Profile avatar" />
+      </div>
+    </header>
   );
 };
 

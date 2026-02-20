@@ -1,54 +1,148 @@
-.Header {
-  color: white;
-  object-fit: contain;
-  height: 450px;
+.hero {
+  position: relative;
+  min-height: clamp(480px, 68vh, 700px);
+  padding: clamp(9rem, 15vh, 11rem) clamp(1rem, 4vw, 3rem) clamp(5rem, 8vh, 6.5rem);
+  color: var(--text-primary);
+  background: radial-gradient(circle at 15% 10%, rgba(255, 68, 67, 0.22), transparent 55%),
+    radial-gradient(circle at 88% 12%, rgba(38, 181, 255, 0.16), transparent 46%),
+    linear-gradient(135deg, #080b1f 0%, #11183d 48%, #0f1733 100%);
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
 }
-.Header__contents {
-  margin-left: 30px;
-  padding-top: 140px;
-  height: 190px;
+
+.hero__noise {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.06) 0.8px, transparent 0.8px);
+  background-size: 3px 3px;
+  opacity: 0.08;
+  pointer-events: none;
 }
-.Header__title {
-  font-size: 3rem;
-  font-weight: 800;
-  padding-bottom: 0.3rem;
+
+.hero__content {
+  position: relative;
+  width: min(720px, 90vw);
+  z-index: 2;
+  animation: hero-enter 480ms ease both;
 }
-.Header__description {
-  width: 45rem;
-  line-height: 1.3;
-  padding-top: 1rem;
-  font-size: 18px;
-  max-width: 360px;
-  height: 80px;
+
+.hero__eyebrow {
+  margin: 0 0 0.45rem;
+  color: var(--accent-gold);
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  font: 700 0.78rem/1 "Manrope", sans-serif;
 }
-.Header__button {
+
+.hero__title {
+  margin: 0;
+  font: 400 clamp(2.6rem, 8vw, 5.2rem) / 0.95 "Bebas Neue", sans-serif;
+  letter-spacing: 0.02em;
+  text-shadow: 0 12px 35px rgba(0, 0, 0, 0.38);
+}
+
+.hero__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-top: 1.1rem;
+}
+
+.hero__meta span {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  padding: 0.35rem 0.58rem;
+  color: rgba(251, 253, 255, 0.95);
+  font: 600 0.73rem/1.1 "Manrope", sans-serif;
+}
+
+.hero__description {
+  margin: 1rem 0 0;
+  color: rgba(238, 243, 250, 0.88);
+  font: 500 clamp(0.95rem, 1.7vw, 1.08rem) / 1.55 "Manrope", sans-serif;
+  max-width: 60ch;
+}
+
+.hero__actions {
+  margin-top: 1.55rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.hero-btn {
+  border-radius: 0.85rem;
+  border: 1px solid transparent;
   cursor: pointer;
-  color: #fff;
-  outline: none;
-  border: none;
-  font-weight: 700;
-  border-radius: 10px;
-  padding-left: 2rem;
-  padding-right: 2rem;
-  margin-right: 1rem;
-  padding-top: 0.5rem;
-  background-color: rgba(51, 51, 51, 0.5);
-  padding-bottom: 0.5rem;
+  font: 700 0.84rem/1 "Manrope", sans-serif;
+  padding: 0.68rem 1rem;
+  letter-spacing: 0.01em;
+  transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease,
+    filter 120ms ease, background 120ms ease;
 }
-.Header__button:hover {
-  color: #000;
-  background-color: #e6e6e6;
-  transition: all 0.2s;
+
+.hero-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
-.Header__fadeBottom {
-  height: 7.5rem;
-  background-image: linear-gradient(
-    180deg,
-    transparent,
-    rgba(37, 37, 37, 0.61),
-    #111
-  );
+
+.hero-btn:not(:disabled):hover {
+  transform: translateY(-1px);
 }
-.Header__description {
-  font-size: 16px;
+
+.hero-btn--primary {
+  color: #ffffff;
+  background: linear-gradient(130deg, var(--accent-red), #ff2f70);
+  box-shadow: 0 10px 24px rgba(229, 9, 20, 0.32);
+}
+
+.hero-btn--secondary {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.17);
+}
+
+.hero-btn--ghost {
+  color: var(--text-muted);
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.hero-btn--ghost:hover {
+  color: var(--text-primary);
+  border-color: rgba(255, 255, 255, 0.38);
+}
+
+.hero__fade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 240px;
+  background: linear-gradient(to bottom, rgba(7, 12, 30, 0), var(--app-bg) 86%);
+}
+
+@keyframes hero-enter {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 760px) {
+  .hero {
+    min-height: 580px;
+    padding-top: 11rem;
+    padding-bottom: 6rem;
+  }
+
+  .hero__title {
+    max-width: 12ch;
+  }
 }

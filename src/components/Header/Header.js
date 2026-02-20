@@ -1,43 +1,94 @@
 import "./Header.css";
-import { useState, useEffect } from "react";
-import axios from "axios";
-import requests from "../../request";
 
-const Header = () => {
-  const [movie, setMovie] = useState([]);
-  useEffect(() => {
-    async function fetchData() {
-      const request = await axios.get(requests.fetchNetflixOriginals);
-      setMovie(
-        request.data.results[
-          Math.floor(Math.random() * request.data.results.length)
-        ]
-      );
-      return request;
-    }
-    fetchData();
-  }, []);
+const truncate = (text, maxLength) => {
+  if (!text) {
+    return "";
+  }
 
+  if (text.length <= maxLength) {
+    return text;
+  }
+
+  return `${text.slice(0, maxLength - 3).trim()}...`;
+};
+
+const Header = ({
+  movie,
+  isLoading,
+  onToggleFavorite,
+  onToggleMyList,
+  onMoreInfo,
+  onSurprise,
+}) => {
   return (
     <header
-      className="Header"
-      style={{
-        backgroundSize: "cover",
-        backgroundImage: `url(" https://image.tmdb.org/t/p/original/${movie?.backdrop_path}")`,
-        backgroundPosition: "50% 10%",
-      }}
+      className="hero"
+      style={
+        movie?.backdropPath
+          ? {
+              backgroundImage: `linear-gradient(to right, rgba(6, 9, 22, 0.94) 0%, rgba(6, 9, 22, 0.74) 45%, rgba(6, 9, 22, 0.2) 100%), url("${movie.backdropPath}")`,
+            }
+          : undefined
+      }
     >
-      <div className="Header__contents">
-        <h1 className="Header__title">
-          {movie?.title || movie.name || movie?.original_name}
+      <div className="hero__noise" />
+      <div className="hero__content">
+        <p className="hero__eyebrow">Recruiter Showcase</p>
+        <h1 className="hero__title">
+          {isLoading ? "Loading your cinematic dashboard..." : movie?.title || "No Title Found"}
         </h1>
-        <div className="Header__buttons">
-          <button className="Header__button">Play</button>
-          <button className="Header__button">My List</button>
+
+        <div className="hero__meta">
+          <span>{movie?.year || "N/A"}</span>
+          <span>{Number(movie?.rating || 0).toFixed(1)} IMDB</span>
+          <span>{movie?.language || "EN"}</span>
+          <span>{movie?.genres?.slice(0, 2).join(" • ") || "Featured Pick"}</span>
         </div>
-        <h1 className="Header__description">{movie?.overview}</h1>
+
+        <p className="hero__description">
+          {isLoading
+            ? "Fetching titles, metadata, and your personalized state..."
+            : truncate(
+                movie?.overview ||
+                  "A richer, recruiter-ready Netflix clone with custom curation, search, and persistence.",
+                220
+              )}
+        </p>
+
+        <div className="hero__actions">
+          <button type="button" className="hero-btn hero-btn--primary">
+            Play
+          </button>
+          <button
+            type="button"
+            className="hero-btn hero-btn--secondary"
+            onClick={() => movie && onToggleMyList(movie)}
+            disabled={!movie}
+          >
+            {movie?.inMyList ? "Remove from My List" : "Add to My List"}
+          </button>
+          <button
+            type="button"
+            className="hero-btn hero-btn--secondary"
+            onClick={() => movie && onToggleFavorite(movie)}
+            disabled={!movie}
+          >
+            {movie?.isFavorite ? "Favorited" : "Favorite"}
+          </button>
+          <button
+            type="button"
+            className="hero-btn hero-btn--ghost"
+            onClick={() => movie && onMoreInfo(movie)}
+            disabled={!movie}
+          >
+            More Info
+          </button>
+          <button type="button" className="hero-btn hero-btn--ghost" onClick={onSurprise}>
+            Surprise Me
+          </button>
+        </div>
       </div>
-      <div className="Header__fadeBottom" />
+      <div className="hero__fade" />
     </header>
   );
 };

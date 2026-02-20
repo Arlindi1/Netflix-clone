@@ -1,88 +1,125 @@
-.modal {
+.form-modal__backdrop {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000; 
+  inset: 0;
+  z-index: 50;
+  background: rgba(2, 4, 16, 0.68);
+  backdrop-filter: blur(4px);
+  display: grid;
+  place-items: center;
+  padding: 1rem;
 }
 
-.modal-content {
-  background: #333; /* Dark background for the modal content /
-  padding: 20px;
-  border-radius: 8px;
-  width: 300px; / Fixed width, you can adjust as needed */
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  }
-  
-  .modal-content .close {
-  float: right;
-  font-size: 1.5rem;
-  font-weight: bold;
-  cursor: pointer;
-  }
-  
-  .modal-content h2 {
-  margin-top: 0;
-  }
-  
-  .modal-content input {
-  width: 100%; 
-  padding: 10px;
-  margin: 10px 0;
-  border-radius: 4px;
-  border: 1px solid #ddd;
-  box-sizing: border-box; 
-  }
-  
-  .modal-content button {
-  width: 100%;
-  padding: 10px;
-  background-color: #e50914; 
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1rem;
-  }
+.form-modal {
+  width: min(620px, 100%);
+  border-radius: 1rem;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.45);
+  background: linear-gradient(165deg, #0f1944, #13183b 70%);
+}
 
-  modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000; /* Ensure it's above other content */
+.form-modal__header {
+  padding: 0.9rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.form-modal__header h3 {
+  margin: 0;
+  color: var(--text-primary);
+  font: 400 1.75rem/1 "Bebas Neue", sans-serif;
+  letter-spacing: 0.04em;
+}
+
+.form-modal__header button {
+  border: 0;
+  background: transparent;
+  color: var(--text-muted);
+  font: 700 0.9rem/1 "Manrope", sans-serif;
+  cursor: pointer;
+}
+
+.form-modal__body {
+  padding: 1rem;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.form-modal__body label {
+  display: grid;
+  gap: 0.35rem;
+  color: var(--text-muted);
+  font: 600 0.75rem/1.3 "Manrope", sans-serif;
+}
+
+.form-modal__body input,
+.form-modal__body textarea,
+.form-modal__body select {
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 0.75rem;
+  background: rgba(3, 8, 26, 0.65);
+  color: var(--text-primary);
+  padding: 0.65rem 0.75rem;
+  font: 500 0.86rem/1.3 "Manrope", sans-serif;
+  outline: none;
+  transition: border-color 120ms ease;
+}
+
+.form-modal__body input:focus,
+.form-modal__body textarea:focus,
+.form-modal__body select:focus {
+  border-color: rgba(255, 255, 255, 0.42);
+}
+
+.form-modal__body textarea {
+  resize: vertical;
+  min-height: 96px;
+}
+
+.form-modal__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.form-modal__error {
+  margin: 0;
+  color: #ff8899;
+  font: 600 0.78rem/1.4 "Manrope", sans-serif;
+}
+
+.form-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.55rem;
+  margin-top: 0.3rem;
+}
+
+.form-btn {
+  border: 1px solid transparent;
+  border-radius: 0.75rem;
+  padding: 0.58rem 0.82rem;
+  cursor: pointer;
+  font: 700 0.76rem/1 "Manrope", sans-serif;
+}
+
+.form-btn--ghost {
+  border-color: rgba(255, 255, 255, 0.22);
+  color: var(--text-muted);
+  background: transparent;
+}
+
+.form-btn--solid {
+  border: 0;
+  color: #ffffff;
+  background: linear-gradient(132deg, var(--accent-red), var(--accent-rose));
+}
+
+@media (max-width: 580px) {
+  .form-modal__grid {
+    grid-template-columns: 1fr;
   }
-  
-  /* Modal window styles */
-  .modal-content {
-    background-color: #fff; /* Change the background as needed */
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    z-index: 1001; /* Above the overlay */
-    /* Set a fixed size or max-width and max-height */
-    width: 80%;
-    max-width: 500px;
-    max-height: 80%;
-    overflow-y: auto; /* Enables scroll if content is too long */
-  }
-  
-  /* Close button styles */
-  .close-modal {
-    cursor: pointer;
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    font-size: 1.5rem;
-    font-weight: bold;
-  }
+}
